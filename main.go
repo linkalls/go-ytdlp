@@ -11,9 +11,9 @@ import (
 )
 
 func main() {
-    dir := `E:\minato`
+    dir := `E:\minato/streams`
     errorDir := `E:\error`
-    dropboxDir := "dropbox:youtube"
+    dropboxDir := "dropbox:youtube/streams"
 
     // エラーフォルダが存在しない場合は作成
     if _, err := os.Stat(errorDir); os.IsNotExist(err) {
