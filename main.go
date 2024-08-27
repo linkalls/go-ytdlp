@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-    dir := `E:\minato` 
+    dir := `E:\minato`
     errorDir := `E:\error`
     dropboxDir := "dropbox:youtube"
 
@@ -25,7 +25,7 @@ func main() {
     }
 
     // 特殊文字（記号や絵文字など）を削除する正規表現
-    re := regexp.MustCompile(`[^\w\s\p{Han}\p{Hiragana}\p{Katakana}#\[\]【】.-]`)
+    re := regexp.MustCompile(`[^\w\s\p{Han}\p{Hiragana}\p{Katakana}#\[\]【】.-ー]`)
     // 全角スペースをアンダースコアに置換する正規表現
     spaceRe := regexp.MustCompile(`\p{Zs}`)
 
@@ -49,6 +49,8 @@ func main() {
                 // 全角の「【」と「】」を半角の「[」と「]」に置換
                 newName = strings.ReplaceAll(newName, "【", "[")
                 newName = strings.ReplaceAll(newName, "】", "]")
+                // 全角の「ー」を半角の「-」に置換
+                newName = strings.ReplaceAll(newName, "ー", "-")
                 oldPath := filepath.Join(dir, oldName)
                 newPath := filepath.Join(dir, newName)
 
