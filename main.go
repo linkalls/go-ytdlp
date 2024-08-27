@@ -11,9 +11,9 @@ import (
 )
 
 func main() {
-    dir := `E:\minato/streams`
+    dir := `E:\minato/videos/`
     errorDir := `E:\error`
-    dropboxDir := "dropbox:youtube/streams"
+    dropboxDir := "dropbox:youtube/videos"
 
     // エラーフォルダが存在しない場合は作成
     if _, err := os.Stat(errorDir); os.IsNotExist(err) {
@@ -25,7 +25,7 @@ func main() {
     }
 
     // 特殊文字（記号や絵文字など）を削除する正規表現
-    re := regexp.MustCompile(`[^\w\s\p{Han}\p{Hiragana}\p{Katakana}#\[\]【】.-ー]`)
+    re := regexp.MustCompile(`[^\w\s\p{Han}\p{Hiragana}\p{Katakana}#\[\]【】.-ー０-９]`)
     // 全角スペースをアンダースコアに置換する正規表現
     spaceRe := regexp.MustCompile(`\p{Zs}`)
 
@@ -51,6 +51,8 @@ func main() {
                 newName = strings.ReplaceAll(newName, "】", "]")
                 // 全角の「ー」を半角の「-」に置換
                 newName = strings.ReplaceAll(newName, "ー", "-")
+                // 全角数字を半角数字に変換
+                newName = convertFullWidthDigitsToHalfWidth(newName)
                 oldPath := filepath.Join(dir, oldName)
                 newPath := filepath.Join(dir, newName)
 
@@ -110,4 +112,16 @@ func isFileInUse(filePath string) bool {
     }
     file.Close()
     return false
+}
+
+// 全角数字を半角数字に変換する関数
+func convertFullWidthDigitsToHalfWidth(s string) string {
+    result := []rune{}
+    for _, r := range s {
+        if r >= '０' && r <= '９' {
+            r -= '０' - '0'
+        }
+        result = append(result, r)
+    }
+    return string(result)
 }
